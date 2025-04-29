@@ -15,27 +15,52 @@ The project includes:
 
 ## 📁 Project Structure
 
-```
 Image_Video_Captioning/
-├── backend/
-│   ├── main.py                # FastAPI backend with endpoints for image/video captioning
-│   ├── inference.py           # Inference logic for generating captions
-│   ├── database.py            # SQLite setup & MediaCaption table
-│   ├── uploads/               # Stores uploaded files temporarily
-│   └── media_captions.db      # SQLite database file
-├── frontend/
-│   ├── index.html             # Main page
-│   ├── App.jsx                # React entry with routes
-│   ├── components/            # Header, Footer, Predict, Error, etc.
-│   └── styles/                # Custom Tailwind/CSS
-├── model/
-│   ├── image_data_processing.ipynb
-│   ├── video_data_processing.ipynb
-│   ├── vocab.ipynb
-│   └── update_training.ipynb
-├── checkpoints/               # Trained model checkpoint (ResNet50-LSTM)
-├── README.md                  # ← You're here
-```
+│
+├── captioning-app/                      # Full-stack application (FastAPI + React)
+│   ├── backend/                         # Backend: FastAPI + SQLite + Inference
+|   |   ├── vstatic/                     #
+│   │   ├── static/                      # trained models for image & video
+|   |   ├── uploads/                     # Uploaded files (temporarily stored)
+│   │   ├── utils/                 
+│   │   |   ├──image_util.py             #
+│   │   |   └──video_util.py             #
+│   │   ├── main.py                      # FastAPI app entry point
+│   │   ├── inference.py                 # Unified image/video captioning logic
+│   │   ├── database.py                  # SQLite setup and MediaCaption table
+│   │   ├── model.py                     # Refernce model architecture
+│   │   ├── test_conn.py                 # simple setup to check database connection
+│   │   └── media_captions.db            # SQLite database
+│   │
+│   │
+│   └── frontend/src/                    # Frontend: React + Tailwind CSS
+|       ├── assets/                      # used logo,images
+│       ├── components/                  # Header, Footer, UploadForm , Uploadpreview , Error components
+│       |   ├── header.jsx
+│       |   ├── footer.jsx
+|       |   ├── Uploadform.jsx
+|       |   └── Uploadpreview.jsx
+│       ├── pages/                       # 
+│       |   ├── index.jsx
+|       |   └── predict.jsx
+│       ├── App.jsx                      # Entry point with routing
+│       ├── main.jsx                      
+│       ├── index.css                    # User modified css
+│       └── app.css                      # CSS or Tailwind configurations
+│
+│  
+│
+├── flickr8kdata/                        # Flickr8k dataset folder (images + captions)
+├── msrvttdata/                          # MSR-VTT video dataset (videos + captions)
+├── reports/                             # Reports, visualizations, logs
+│
+├── image_data_processing.ipynb          # Preprocessing images & captions
+├── video_data_processing.ipynb          # Frame sampling, video caption prep
+├── vocab.ipynb                          # Vocabulary creation from captions
+├── uinified_model_training.ipynb        # Unified model training (ResNet50 + LSTM)
+├── checkpoints/                         # Trained model checkpoints
+└── README.md                            # ← This file
+
 
 ---
 
@@ -84,7 +109,7 @@ React frontend will run at: [http://localhost:5173](http://localhost:5173)
 Inside `/model`, you’ll find three Jupyter Notebooks:
 - `image_data_processing.ipynb`: Prepares image data (Flickr8k)
 - `video_data_processing.ipynb`: Prepares video data (MSR-VTT)
-- `update_training.ipynb`: Trains the shared ResNet50 + LSTM model
+- `unified_model_training.ipynb`: Trains the shared ResNet50 + LSTM model
 
 ---
 
