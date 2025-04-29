@@ -14,7 +14,7 @@ The project includes:
 ---
 
 ## 📁 Project Structure
-
+```
 Image_Video_Captioning/
 │
 ├── captioning-app/                      # Full-stack application (FastAPI + React)
@@ -60,7 +60,7 @@ Image_Video_Captioning/
 ├── uinified_model_training.ipynb        # Unified model training (ResNet50 + LSTM)
 ├── checkpoints/                         # Trained model checkpoints
 └── README.md                            # ← This file
-
+```
 
 ---
 
