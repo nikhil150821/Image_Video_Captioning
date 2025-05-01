@@ -54,8 +54,10 @@ const Predict = () => {
               className="preview-content"
             />
           )}
-          <h3 className="text-xl mt-4 font-semibold">Generated Caption:</h3>
-          <p className="text-gray-800">{caption}</p>
+          <div className="caption">
+          <h3 className="tres">Generated Caption:</h3>
+          <p className="res">{caption}</p>
+          </div>
         </>
       )}
     </div>

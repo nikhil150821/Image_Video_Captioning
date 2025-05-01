@@ -8,6 +8,7 @@ import Header from "./components/header";
 import Footer from "./components/footer";
 import Index from "./pages/Index";
 import Predict from "./pages/predict";
+import About from "./pages/about";
 import titleImage from './assets/title.png';
 
 const App = () => {
@@ -19,6 +20,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/predict" element={<Predict />} />
+          <Route path="/about" element={<About />} />
         </Routes>
       </main>
       <Footer />

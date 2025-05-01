@@ -19,7 +19,7 @@ const Header = () => {
       </Link>
       <br/>
       <Link
-        to="/predict"
+        to="/about"
         className="nav-button flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-green-500 text-white transition-all duration-300 
                   hover:bg-green-600 
                   md:w-auto md:px-4
