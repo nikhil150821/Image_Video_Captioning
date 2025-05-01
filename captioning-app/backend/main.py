@@ -1,5 +1,5 @@
 from fastapi import FastAPI, UploadFile, File ,Depends
-from test.inference import generate_caption_image, generate_caption_video
+from inference import generate_caption_image, generate_caption_video
 from fastapi.middleware.cors import CORSMiddleware
 from database import SessionLocal, MediaCaption
 import shutil, os

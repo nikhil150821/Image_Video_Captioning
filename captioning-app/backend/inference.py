@@ -1,20 +1,20 @@
 import torch
 import pickle
-from test.model import EncoderCNN
-from test.model import DecoderRNN
+from model import EncoderCNN
+from model import DecoderRNN
 from utils.image_utils import load_and_preprocess_image
 from utils.video_utils import sample_video_frames, preprocess_video_frames
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-with open("static/vocab.pkl", "rb") as f:
+with open("models/vocab.pkl", "rb") as f:
     vocab = pickle.load(f)
 inv_vocab = {idx: word for word, idx in vocab.items()}
 
 # Load model
 encoder = EncoderCNN(embed_size=256).to(device)
 decoder = DecoderRNN(embed_size=256, hidden_size=512, vocab_size=len(vocab)).to(device)
-checkpoint = torch.load("static/unified_model_epoch_30.pth", map_location=device,weights_only=False)
+checkpoint = torch.load("models/unified_model_epoch_50.pth", map_location=device,weights_only=False)
 encoder.load_state_dict(checkpoint["encoder_state_dict"])
 decoder.load_state_dict(checkpoint["decoder_state_dict"])
 encoder.eval()
