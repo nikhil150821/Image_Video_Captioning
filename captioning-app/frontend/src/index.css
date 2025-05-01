@@ -27,7 +27,7 @@ body {
 }
 .img{
   max-width: 350px;
-  max-height: 350px;
+  max-height: 300px;
   border-radius: 5px;
   height: auto;
 }
