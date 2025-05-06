@@ -4,7 +4,7 @@ import torch
 from torchvision import transforms
 from PIL import Image
 
-def sample_video_frames(video_path, num_frames=10):
+def sample_video_frames(video_path, num_frames=100):
     cap = cv2.VideoCapture(video_path)
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     indices = np.linspace(0, total_frames - 1, num_frames).astype(int)

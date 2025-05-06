@@ -1,0 +1,132 @@
+
+Detailed Model Architecture for Unified Image and Video Captioning
+
+The model is designed using the Encoder–Decoder framework, a popular architecture for sequence generation tasks like image and video captioning.
+
+1. Overall Pipeline
+-------------------
+The architecture is composed of:
+- Encoder (CNN - ResNet-50): Extracts visual features from images or video frames.
+- Decoder (RNN - LSTM): Generates a sequence of words (a caption) from the visual features.
+- Embedding and Vocabulary Mapping: Transforms words to and from numerical form.
+- Loss Function + Optimizer: Trains the model by reducing prediction error over epochs.
+
+2. Encoder: ResNet-50 CNN
+-------------------------
+Purpose:
+- Extract high-dimensional feature vectors from input images or video frames.
+
+Process:
+- Input: Preprocessed image or a single frame from a video.
+- Pretrained ResNet-50 is used (excluding the final fully connected layer).
+- Output: A feature tensor of shape [batch_size, feature_dim].
+
+Why ResNet-50?
+- Deep enough to capture semantic and fine-grained features.
+- Skip connections mitigate vanishing gradients.
+- Pretrained on ImageNet → excellent transfer learning results.
+
+Operations:
+- Resize image to 224×224.
+- Normalize using ImageNet stats.
+- Pass through ResNet-50.
+- Extract output before the classification layer (avgpool).
+
+Mathematically: Let I be an image → F = CNN(I) where F ∈ ℝ^d (d = 2048).
+
+3. Decoder: LSTM
+----------------
+Purpose:
+- Generate a sentence (caption) from the encoded visual features.
+
+Why LSTM?
+- Handles long-range dependencies.
+- Captures context in sequential data generation.
+
+Components:
+- Embedding Layer: Converts each word to a dense vector (e.g., 256-d).
+- LSTM Cell: Sequentially generates hidden states using word embeddings.
+- Linear Layer: Projects LSTM output to vocabulary size.
+- Softmax: Outputs a probability distribution over the vocabulary.
+
+Algorithm:
+Let X be the image feature vector.
+Let w1, w2, ..., wn be the ground truth caption tokens.
+Let E(wi) be the embedding for word wi.
+
+Training:
+1. Embed the image features to init hidden state h0
+2. For each timestep t:
+    - Input: embedding(wt)
+    - Output: ht = LSTM(ht-1, wt)
+    - Prediction: y = Softmax(Linear(ht))
+    - Compute Loss: CrossEntropy(y, wt+1)
+
+Inference:
+1. Input: image features
+2. Generate: start token
+3. Repeat:
+    - Predict next word from previous hidden state
+    - Append word to output
+    - Stop on <end> token or max length
+
+Mathematically: ht, ct = LSTM(xt, (ht-1, ct-1))
+yt = softmax(W * ht + b)
+
+4. Vocabulary & Embeddings
+--------------------------
+- Vocabulary is created by tokenizing all training captions and keeping words with frequency ≥ threshold.
+- Each word is mapped to an index (word2idx) and vice versa (idx2word).
+- Special tokens: <start>, <end>, <pad>.
+
+5. Loss Function & Optimizer
+----------------------------
+Cross-Entropy Loss:
+- Measures how close predicted word probabilities are to the actual word index.
+- Ignores padding tokens using ignore_index.
+
+Adam Optimizer:
+- Adaptive learning rate.
+- Used for both CNN fine-tuning and LSTM training (if unfreezing CNN).
+
+6. Video Captioning Strategy
+----------------------------
+- Sample fixed number of frames (e.g., 5–10) per video.
+- Encode each frame using ResNet-50.
+- Pool the features (mean or max pooling) to get a single feature vector.
+- Feed the vector to the LSTM decoder to generate captions.
+
+Let F1, F2, ..., Fn be feature vectors of n frames:
+F_video = mean([F1, F2, ..., Fn])
+
+7. Greedy Search / Beam Search (for inference)
+----------------------------------------------
+- Greedy: At each step, pick the word with the highest probability.
+- Beam Search: Keeps k most probable sequences at each step → better results.
+
+8. Training Loop Summary
+------------------------
+For each batch:
+- Encode images or video frames to features.
+- Feed to LSTM decoder with ground-truth captions.
+- Compute loss, update weights.
+- Save best-performing models and vocabulary.
+
+Logging example:
+[Epoch X/Y] [Batch A/B] [Loss: 2.34, Acc: 81.2%]
+
+9. Architecture Diagram Description
+-----------------------------------
+Here’s how the architecture flows:
+
+Input (Image / Frame)
+      ↓
+ ResNet-50 Encoder
+      ↓
+  Feature Vector (2048-d)
+      ↓
+  LSTM Decoder ← ← ← ← ← ← ←
+     ↓          ↑         ↑
+Word_t → Embed → LSTM → Output → Softmax → Next word
+
+For video captioning, multiple frames are encoded and pooled before decoding.
